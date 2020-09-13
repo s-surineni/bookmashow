@@ -1,7 +1,11 @@
 from django.contrib.auth.models import User
-from rest_framework import permissions, viewsets
+from django.http import JsonResponse
+from rest_framework import generics, mixins, permissions, viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-from .serializers import UserSerializer
+from .models import Movie
+from .serializers import MovieSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -9,3 +13,8 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class MovieList(generics.ListCreateAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
