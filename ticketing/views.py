@@ -3,8 +3,10 @@ from django.http import JsonResponse
 from rest_framework import generics, mixins, permissions, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from .models import Movie
+from .permissions import IsOwnerOrReadOnly
 from .serializers import MovieSerializer, UserSerializer
 
 
@@ -15,6 +17,12 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class MovieList(generics.ListCreateAPIView):
+class MovieViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

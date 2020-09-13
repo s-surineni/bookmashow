@@ -1,9 +1,13 @@
 from django.urls import include, path
-from rest_framework import routers
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
 
+router = DefaultRouter()
+router.register(r'movies', views.MovieViewSet)
+router.register(r'users', views.UserViewSet)
+
 urlpatterns = [
-    path('movies/', views.MovieList.as_view()),
+    path('', include(router.urls)),
 ]
