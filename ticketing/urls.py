@@ -5,8 +5,11 @@ from . import views
 
 
 router = DefaultRouter()
-router.register(r'movies', views.MovieViewSet)
+router.register(r'movie', views.MovieViewSet)
 router.register(r'users', views.UserViewSet)
+router.register(r'auditorium', views.AuditoriumViewSet)
+router.register(r'multiplex', views.MultiplexViewSet)
+router.register(r'seat', views.SeatViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

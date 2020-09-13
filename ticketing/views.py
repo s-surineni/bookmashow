@@ -5,9 +5,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .models import Movie
+from .models import Auditorium, Movie, Multiplex
 from .permissions import IsOwnerOrReadOnly
-from .serializers import MovieSerializer, UserSerializer
+from .serializers import AuditoriumSerializer, MovieSerializer, UserSerializer
+from ticketing import models
+from ticketing import serializers
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -23,6 +25,17 @@ class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class AuditoriumViewSet(viewsets.ModelViewSet):
+    queryset = Auditorium.objects.all()
+    serializer_class = AuditoriumSerializer
+# class ScreeningViewSet(viewsets.ModelViewSet):
+
+
+class MultiplexViewSet(viewsets.ModelViewSet):
+    queryset = Multiplex.objects.all()
+    serializer_class = serializers.MultiplexSerializer
+
+
+class SeatViewSet(viewsets.ModelViewSet):
+    queryset = models.Seat.objects.all()
+    serializer_class = serializers.SeatSerializer
