@@ -11,10 +11,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'username', 'email']
 
 
-class MovieSerializer(serializers.ModelSerializer):
+class MovieSerializer(serializers.HyperlinkedModelSerializer):
+    screenings = serializers.HyperlinkedRelatedField(many=True,
+                                                     view_name='screening-detail',
+                                                     read_only=True)
+
     class Meta:
         model = Movie
-        fields = ['id', 'title', 'duration_minutes']
+        fields = ['id', 'title', 'duration_minutes',
+                  'screenings']
 
 
 class ScreeningSerializer(serializers.ModelSerializer):
@@ -23,10 +28,12 @@ class ScreeningSerializer(serializers.ModelSerializer):
         fields = ['movie', 'auditorium', 'screening_start']
 
 
-class AuditoriumSerializer(serializers.ModelSerializer):
+class AuditoriumSerializer(serializers.HyperlinkedModelSerializer):
+    seats = serializers.PrimaryKeyRelatedField(many=True,
+                                               queryset=models.Seat.objects.all())
     class Meta:
         model = Auditorium
-        fields = ['name', 'multiplex']
+        fields = ['name', 'multiplex', 'seats']
 
 
 class MultiplexSerializer(serializers.ModelSerializer):
