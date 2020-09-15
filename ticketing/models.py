@@ -26,6 +26,11 @@ class Screening(models.Model):
     auditorium = models.ForeignKey('Auditorium', on_delete=models.CASCADE)
     screening_start = models.DateTimeField()
 
+    def __str__(self):
+        return '{}: {}: {}'.format(self.movie,
+                                   self.auditorium,
+                                   self.screening_start)
+
 
 class Seat(models.Model):
     row = models.CharField(max_length=50)
@@ -42,11 +47,15 @@ class Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
+# add constraint so that seat and screening combination should not occure more than once
 class SeatReserved(models.Model):
     seat = models.ForeignKey(Seat,
                              related_name='seats',
                              on_delete=models.SET_NULL, null=True)
-    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
+    reservation = models.ForeignKey(Reservation,
+                                    related_name='reserved_seats',
+                                    on_delete=models.CASCADE)
+    # TODO: not necessary as reservation already contains screening
     screening = models.ForeignKey(Screening, on_delete=models.CASCADE)
 
 

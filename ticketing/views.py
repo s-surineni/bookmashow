@@ -1,9 +1,13 @@
+import json
+
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.views import View
 from rest_framework import generics, mixins, permissions, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.views import APIView
 
 from .models import Auditorium, Movie, Multiplex
 from .permissions import IsOwnerOrReadOnly
@@ -23,6 +27,26 @@ class MovieViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+
+
+class Reservation(APIView):
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def post(self, request, *args, **kwargs):
+        post_data = json.loads(request.body)
+        reservation_obj = models.Reservation()
+        reservation_obj.screening = models.Screening.objects.get(
+            pk=post_data['screening'])
+        reservation_obj.save()
+        # reservation_obj.user = request.user
+        reservation_obj.user = User.objects.get(pk=(post_data['user']))
+        for a_seat in post_data['seats']:
+            models.SeatReserved.objects.create(
+                seat=models.Seat.objects.get(pk=a_seat),
+                reservation=reservation_obj,
+                screening=models.Screening.objects.get(
+                    pk=post_data['screening']))
+        return Response({'success': True})
+
 
 
 class AuditoriumViewSet(viewsets.ModelViewSet):
