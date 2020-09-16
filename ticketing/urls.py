@@ -6,7 +6,7 @@ from . import views
 
 
 router = DefaultRouter()
-router.register(r'movie', views.MovieViewSet)
+# router.register(r'movie', views.MovieViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'auditorium', views.AuditoriumViewSet)
 router.register(r'multiplex', views.MultiplexViewSet)
@@ -16,6 +16,8 @@ router.register(r'screening', views.ScreeningViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('movie/', csrf_exempt(views.MovieListView.as_view()),
+         name='movie'),
     path('reservation/', csrf_exempt(views.Reservation.as_view()),
          name='reservation')
 ]

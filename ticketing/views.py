@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views import View
-from rest_framework import generics, mixins, permissions, viewsets
+from rest_framework import filters, generics, mixins, permissions, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -27,6 +27,13 @@ class MovieViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+
+
+class MovieListView(generics.ListAPIView):
+    queryset = models.Movie.objects.all()
+    serializer_class = MovieSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
 
 
 class Reservation(APIView):
