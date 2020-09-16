@@ -29,7 +29,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
 
-class MovieListView(generics.ListAPIView):
+class MovieListView(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = models.Movie.objects.all()
     serializer_class = MovieSerializer
     filter_backends = [filters.SearchFilter]

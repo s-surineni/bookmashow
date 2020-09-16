@@ -6,18 +6,18 @@ from . import views
 
 
 router = DefaultRouter()
-# router.register(r'movie', views.MovieViewSet)
+router.register(r'movie', views.MovieListView)
 router.register(r'users', views.UserViewSet)
 router.register(r'auditorium', views.AuditoriumViewSet)
 router.register(r'multiplex', views.MultiplexViewSet)
 router.register(r'seat', views.SeatViewSet)
 router.register(r'screening', views.ScreeningViewSet)
+# router.extend(views.api_root)
+
 # router.register(r'reservation', views.Reservation)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('movie/', csrf_exempt(views.MovieListView.as_view()),
-         name='movie'),
     path('reservation/', csrf_exempt(views.Reservation.as_view()),
          name='reservation')
 ]
