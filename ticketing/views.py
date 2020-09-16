@@ -84,8 +84,8 @@ class ScreeningViewSet(viewsets.ModelViewSet):
             screening=screening_obj)
         all_reserved_seats = []
         for a_res in all_reservations:
-            all_reserved_seats += [seat.seat.id for seat in a_res.reserved_seats.all()]
-            # all_reserved_seats += list(a_res.reserved_seats.all())
+            all_reserved_seats += [seat.seat.id for seat
+                                   in a_res.reserved_seats.all()]
 
         seat_resp = []
         for a_seat in auditorium_seats:
