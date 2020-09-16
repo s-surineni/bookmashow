@@ -50,7 +50,7 @@ class Reservation(models.Model):
 # add constraint so that seat and screening combination should not occure more than once
 class SeatReserved(models.Model):
     seat = models.ForeignKey(Seat,
-                             related_name='seats',
+                             related_name='seat',
                              on_delete=models.SET_NULL, null=True)
     reservation = models.ForeignKey(Reservation,
                                     related_name='reserved_seats',

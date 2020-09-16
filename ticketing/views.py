@@ -80,13 +80,19 @@ class ScreeningViewSet(viewsets.ModelViewSet):
         screening_obj = self.get_object()
         auditorium_obj = screening_obj.auditorium
         auditorium_seats = auditorium_obj.seats.all()
-        all_reservations = models.Reservation.objects.filter(screening=screening_obj)
+        all_reservations = models.Reservation.objects.filter(
+            screening=screening_obj)
         all_reserved_seats = []
         for a_res in all_reservations:
-            all_reserved_seats += list(a_res.seats.objects.all())
+            all_reserved_seats += [seat.seat.id for seat in a_res.reserved_seats.all()]
+            # all_reserved_seats += list(a_res.reserved_seats.all())
+
         seat_resp = []
         for a_seat in auditorium_seats:
-            reserved = a_seat in all_reserved_seats
-            seat_resp.append((a_seat.row, a_seat.number, reserved))
+            available = a_seat.id not in all_reserved_seats
+            seat_info = {'row': a_seat.row,
+                         'number': a_seat.number,
+                         'available': available}
+            seat_resp.append(seat_info)
 
         return Response(seat_resp)

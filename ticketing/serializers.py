@@ -46,9 +46,9 @@ class ReservationSerializer(serializers.ModelSerializer):
     # TODO: Make sure if this is necessary, as this is already available in model
     screening = serializers.HyperlinkedRelatedField(queryset=models.Screening.objects.all(),
                                                     view_name='screening-detail')
-    # seats = serializers.HyperlinkedRelatedField(many=True,
-    #                                             read_only=True,
-    #                                             view_name='screening-detail')
+    seats = serializers.HyperlinkedRelatedField(many=True,
+                                                read_only=True,
+                                                view_name='screening-detail')
 
     class Meta:
         model = models.Reservation
